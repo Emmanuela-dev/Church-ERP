@@ -1,67 +1,61 @@
-# Church Management System
+# ⛪ Church Management System
 
-A full-stack church management system built with React, Flask, and PostgreSQL.
+A full-stack web application designed to help churches efficiently manage their congregation, activities, and finances — all in one place.
 
-Supabase is now supported as the primary managed PostgreSQL option.
+---
 
-## Setup
+## 📖 About
 
-### Backend
-```bash
-cd backend
-pip install -r requirements.txt
-```
+The Church Management System (ChurchMS) is built to simplify the day-to-day administrative work of a church. Whether you're tracking member attendance, organizing events, recording tithes and offerings, or maintaining church information, ChurchMS provides a clean and intuitive interface to handle it all.
 
-Configure `.env`:
-```
-DATABASE_URL=postgresql://postgres:password@localhost:5432/church_db
-# or use Supabase instead of DATABASE_URL
-# SUPABASE_DB_URL=postgresql://postgres.<project-ref>:<password>@<host>:5432/postgres?sslmode=require
-SECRET_KEY=your-secret-key
-```
+It is built with a modern tech stack:
+- **Frontend:** React + Tailwind CSS (Vite)
+- **Backend:** Python Flask (REST API)
+- **Database:** PostgreSQL
 
-Run backend:
-```bash
-python run.py
-```
+---
 
-### Supabase Setup
-1. Create a new Supabase project.
-2. Open SQL Editor in Supabase and run [backend/supabase/schema.sql](backend/supabase/schema.sql).
-3. Copy your Supabase Postgres connection string.
-4. In [backend/.env](backend/.env), set `SUPABASE_DB_URL` (or `DATABASE_URL`) to that connection string.
-5. Keep `SECRET_KEY` set.
-6. Start backend with `python run.py`.
+## ✨ Features
 
-Use [backend/.env.example](backend/.env.example) as reference.
+### 🏛️ Church Information
+- Store and display the church's name, motto, vision, and mission statement
+- Record the church's location (address, city, country), contact details, website, and founding year
+- Track the lead pastor's name
+- Define multiple church services (e.g. Sunday Service, Bible Study, Prayer Meeting)
+- Set the **order of service** for each service (e.g. Opening Prayer → Worship → Sermon → Offering → Benediction)
 
-### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
+### 👥 Member Management
+- Add and manage individual church members with full personal details:
+  - Name, gender, date of birth, phone, email, address, occupation
+  - Church role (Member, Deacon, Elder, Pastor, Usher, Choir, etc.)
+  - Membership status (Active, Inactive, Transferred)
+  - Membership date
+- Organize members into **family units**:
+  - Assign a **Head of Family**, **Spouse**, and **Children**
+  - View the full family profile in one place
+- Search members by name
 
-## Features
-- Church Info: name, location, vision, mission, pastor, services & order of service
-- Members: individual members + family units (head, spouse, children)
-- Activities: events with categories, dates, status tracking
-- Finance: tithe, offering, donations, pledges with charts and summaries
+### 📅 Activities & Events
+- Create and manage church activities and events
+- Categorize events (Outreach, Conference, Youth, Prayer, Worship, Bible Study, etc.)
+- Track event details: date, time, venue, organizer, and description
+- Monitor event status: **Upcoming**, **Ongoing**, **Completed**, or **Cancelled**
+- Filter activities by status
 
-## API Endpoints
+### 💰 Finance Management
+- Record all financial contributions:
+  - **Tithe** — regular 10% contributions from members
+  - **Offering** — general weekly/service offerings
+  - **Donations** — special one-time gifts
+  - **Pledges** — committed future contributions
+- Link contributions to specific members or record as anonymous
+- Track the date, currency, amount, and who recorded the entry
+- View a **finance summary** with totals per contribution type
+- Visual charts (bar chart and pie chart) for financial overview
 
-| Module     | Endpoint                        | Methods          |
-|------------|---------------------------------|------------------|
-| Church     | /api/church/                    | GET, POST        |
-| Church     | /api/church/:id                 | PUT              |
-| Church     | /api/church/:id/services        | POST             |
-| Church     | /api/church/services/:id        | PUT, DELETE      |
-| Members    | /api/members/                   | GET, POST        |
-| Members    | /api/members/:id                | GET, PUT, DELETE |
-| Members    | /api/members/families           | GET, POST        |
-| Members    | /api/members/families/:id       | GET, DELETE      |
-| Activities | /api/activities/                | GET, POST        |
-| Activities | /api/activities/:id             | GET, PUT, DELETE |
-| Finance    | /api/finance/                   | GET, POST        |
-| Finance    | /api/finance/:id                | GET, PUT, DELETE |
-| Finance    | /api/finance/summary            | GET              |
+### 📊 Dashboard
+- At-a-glance overview of the entire church:
+  - Total members, families, and activities
+  - Church name, motto, pastor, and location
+  - Finance summary chart
+
