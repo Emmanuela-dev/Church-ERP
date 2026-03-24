@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { financeAPI, membersAPI } from '../lib'
-import type { Finance, FinanceSummary, Member } from '../types'
+import { financeAPI } from '../lib'
+import type { Finance, FinanceSummary } from '../types'
 import Modal from '../components/Modal'
 import { MdAdd, MdDelete, MdEdit, MdAttachMoney } from 'react-icons/md'
 import {
@@ -9,13 +9,13 @@ import {
 } from 'recharts'
 
 const TYPES = ['Tithe', 'Offering', 'Donation', 'Pledge']
-const CURRENCIES = ['GHS', 'USD', 'EUR', 'GBP', 'NGN']
-const PIE_COLORS = ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b']
+const CURRENCIES = ['KES', 'USD', 'EUR', 'GBP', 'GHS', 'NGN']
+const PIE_COLORS = ['#7C3AED', '#F59E0B', '#10b981', '#EC4899']
 
-const emptyEntry: Omit<Finance, 'id' | 'created_at' | 'member'> = {
-  type: 'Tithe', amount: 0, currency: 'KHS',
-  member_id: null, is_anonymous: false, date: new Date().toISOString().slice(0, 10),
-  recorded_by: null, notes: null,
+const emptyEntry: Omit<Finance, 'id' | 'created_at'> = {
+  type: 'Tithe', amount: 0, currency: 'KES',
+  contributor_name: '', date: new Date().toISOString().slice(0, 10),
+  recorded_by: '', notes: '',
 }
 
 function typeBadge(t: string) {
@@ -28,18 +28,15 @@ function typeBadge(t: string) {
 export default function Finance() {
   const [entries, setEntries] = useState<Finance[]>([])
   const [summary, setSummary] = useState<FinanceSummary>({ Tithe: 0, Offering: 0, Donation: 0, Pledge: 0 })
-  const [members, setMembers] = useState<Member[]>([])
   const [filter, setFilter] = useState('all')
   const [modal, setModal] = useState<'form' | null>(null)
-  const [form, setForm] = useState<Omit<Finance, 'id' | 'created_at' | 'member'>>(emptyEntry)
+  const [form, setForm] = useState<Omit<Finance, 'id' | 'created_at'>>(emptyEntry)
   const [editing, setEditing] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
 
   const load = async () => {
-    const [e, s, m] = await Promise.all([
-      financeAPI.getAll(), financeAPI.summary(), membersAPI.getAll(),
-    ])
-    setEntries(e); setSummary(s); setMembers(m)
+    const [e, s] = await Promise.all([ financeAPI.getAll(), financeAPI.summary() ])
+    setEntries(e); setSummary(s);
   }
   useEffect(() => { load() }, [])
 
@@ -72,20 +69,20 @@ export default function Finance() {
 
       {/* Summary Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
-        <div className="stat-card" style={{ background: 'linear-gradient(135deg,#0f172a,#1e1b4b)' }}>
+        <div className="stat-card" style={{ background: 'linear-gradient(135deg,#130826,#2E1065)' }}>
           <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>Total Collected</div>
-          <div style={{ fontSize: 28, fontWeight: 800, color: '#fff' }}>GHS {totalAll.toLocaleString()}</div>
+          <div style={{ fontSize: 28, fontWeight: 800, color: '#fff' }}>KES {totalAll.toLocaleString()}</div>
           <MdAttachMoney style={{ fontSize: 28, color: 'rgba(255,255,255,0.3)', marginTop: 4 }} />
         </div>
         {TYPES.map((type, i) => (
           <div key={type} className="stat-card" style={{ background: [
-            'linear-gradient(135deg,#4f46e5,#7c3aed)',
-            'linear-gradient(135deg,#0891b2,#06b6d4)',
-            'linear-gradient(135deg,#059669,#10b981)',
-            'linear-gradient(135deg,#d97706,#f59e0b)',
+            'linear-gradient(135deg,#7C3AED,#9333EA)',
+            'linear-gradient(135deg,#0D9488,#14B8A6)',
+            'linear-gradient(135deg,#DB2777,#EC4899)',
+            'linear-gradient(135deg,#D97706,#F59E0B)',
           ][i] }}>
             <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>{type}</div>
-            <div style={{ fontSize: 22, fontWeight: 800, color: '#fff' }}>GHS {(summary[type] ?? 0).toLocaleString()}</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: '#fff' }}>KES {(summary[type] ?? 0).toLocaleString()}</div>
           </div>
         ))}
       </div>
@@ -99,8 +96,8 @@ export default function Finance() {
               <BarChart data={barData} margin={{ left: -10 }}>
                 <XAxis dataKey="type" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip formatter={(v: number) => `GHS ${v.toLocaleString()}`} />
-                <Bar dataKey="amount" fill="#4f46e5" radius={[6, 6, 0, 0]} />
+                <Tooltip formatter={(v: number) => `KES ${v.toLocaleString()}`} />
+                <Bar dataKey="amount" fill="#7C3AED" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -112,7 +109,7 @@ export default function Finance() {
                   {pieData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
                 </Pie>
                 <Legend />
-                <Tooltip formatter={(v: number) => `GHS ${v.toLocaleString()}`} />
+                <Tooltip formatter={(v: number) => `KES ${v.toLocaleString()}`} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -132,7 +129,7 @@ export default function Finance() {
       <div className="card" style={{ overflow: 'hidden' }}>
         <table className="table">
           <thead>
-            <tr>{['Date', 'Type', 'Member', 'Amount', 'Currency', 'Recorded By', 'Notes', 'Actions'].map(h => <th key={h}>{h}</th>)}</tr>
+            <tr>{['Date', 'Type', 'Contributor', 'Amount', 'Currency', 'Recorded By', 'Notes', 'Actions'].map(h => <th key={h}>{h}</th>)}</tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
@@ -145,13 +142,11 @@ export default function Finance() {
                 </td>
               </tr>
             ) : filtered.map(e => {
-              const m = e.member ?? (members.find(mm => mm.id === e.member_id))
-              const memberName = e.is_anonymous ? 'Anonymous' : (m ? `${(m as Member).first_name} ${(m as Member).last_name}` : '—')
               return (
                 <tr key={e.id}>
                   <td>{e.date ?? '—'}</td>
                   <td>{typeBadge(e.type)}</td>
-                  <td>{memberName}</td>
+                  <td style={{ fontWeight: 500 }}>{e.contributor_name || <span style={{ color: '#9CA3AF', fontStyle: 'italic' }}>Anonymous</span>}</td>
                   <td style={{ fontWeight: 700, color: '#059669' }}>{Number(e.amount).toLocaleString()}</td>
                   <td>{e.currency}</td>
                   <td>{e.recorded_by ?? '—'}</td>
@@ -159,7 +154,7 @@ export default function Finance() {
                   <td>
                     <div style={{ display: 'flex', gap: 6 }}>
                       <button className="btn btn-ghost btn-sm btn-icon" onClick={() => {
-                        setForm({ type: e.type, amount: e.amount, currency: e.currency, member_id: e.member_id, is_anonymous: e.is_anonymous, date: e.date, recorded_by: e.recorded_by, notes: e.notes })
+                        setForm({ type: e.type, amount: e.amount, currency: e.currency, contributor_name: e.contributor_name || '', date: e.date, recorded_by: e.recorded_by || '', notes: e.notes || '' })
                         setEditing(e.id); setModal('form')
                       }}><MdEdit /></button>
                       <button className="btn btn-danger btn-sm btn-icon" onClick={() => del(e.id)}><MdDelete /></button>
@@ -198,11 +193,8 @@ export default function Finance() {
               <input className="input" type="date" value={form.date ?? ''} onChange={e => setForm({ ...form, date: e.target.value })} />
             </div>
             <div style={{ gridColumn: '1 / -1' }}>
-              <label className="label">Member</label>
-              <select className="input" value={form.member_id ?? ''} onChange={e => setForm({ ...form, member_id: e.target.value || null, is_anonymous: false })}>
-                <option value="">Anonymous</option>
-                {members.map(m => <option key={m.id} value={m.id}>{m.first_name} {m.last_name}</option>)}
-              </select>
+              <label className="label">Contributor Name</label>
+              <input className="input" placeholder="Leave blank for Anonymous" value={form.contributor_name || ''} onChange={e => setForm({ ...form, contributor_name: e.target.value })} />
             </div>
             <div>
               <label className="label">Recorded By</label>

@@ -5,7 +5,7 @@ export const financeAPI = {
   async getAll(type?: string): Promise<Finance[]> {
     let query = supabase
       .from('finance')
-      .select('*, member:members(first_name, last_name)')
+      .select('*')
       .order('date', { ascending: false })
     if (type) query = query.eq('type', type)
     const { data } = await query

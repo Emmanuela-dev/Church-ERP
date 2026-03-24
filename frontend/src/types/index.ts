@@ -73,13 +73,7 @@ export interface Finance {
   type: string
   amount: number
   currency: string
-  member_id: string | null
-  is_anonymous: boolean
-  date: string | null
-  recorded_by: string | null
-  notes: string | null
-  created_at?: string
-  member?: Pick<Member, 'first_name' | 'last_name'> | null
+  contributor_name: string | null
 }
 
 export interface FinanceSummary {

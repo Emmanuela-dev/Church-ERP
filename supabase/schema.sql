@@ -81,8 +81,7 @@ CREATE TABLE IF NOT EXISTS finance (
   type         text NOT NULL,   -- Tithe | Offering | Donation | Pledge
   amount       numeric NOT NULL,
   currency     text DEFAULT 'GHS',
-  member_id    uuid REFERENCES members(id) ON DELETE SET NULL,
-  is_anonymous boolean DEFAULT false,
+  contributor_name text,
   date         date DEFAULT CURRENT_DATE,
   recorded_by  text,
   notes        text,

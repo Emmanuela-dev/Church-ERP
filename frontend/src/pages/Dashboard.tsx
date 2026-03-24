@@ -37,10 +37,10 @@ export default function Dashboard() {
     .map(([name, value]) => ({ name, value }))
 
   const statCards = [
-    { label: 'Total Members',   value: stats.members,    icon: <MdGroup />,         gradient: 'linear-gradient(135deg,#4f46e5,#7c3aed)' },
-    { label: 'Families',        value: stats.families,   icon: <MdFamilyRestroom />, gradient: 'linear-gradient(135deg,#0891b2,#06b6d4)' },
-    { label: 'Activities',      value: stats.activities, icon: <MdEvent />,          gradient: 'linear-gradient(135deg,#059669,#10b981)' },
-    { label: 'Total Finance',   value: `GHS ${stats.total.toLocaleString()}`, icon: <MdAttachMoney />, gradient: 'linear-gradient(135deg,#d97706,#f59e0b)' },
+    { label: 'Total Members',   value: stats.members,    icon: <MdGroup />,         gradient: 'linear-gradient(135deg,#7C3AED,#9333EA)' },
+    { label: 'Families',        value: stats.families,   icon: <MdFamilyRestroom />, gradient: 'linear-gradient(135deg,#0D9488,#14B8A6)' },
+    { label: 'Activities',      value: stats.activities, icon: <MdEvent />,          gradient: 'linear-gradient(135deg,#DB2777,#EC4899)' },
+    { label: 'Total Finance',   value: `KES ${stats.total.toLocaleString()}`, icon: <MdAttachMoney />, gradient: 'linear-gradient(135deg,#D97706,#F59E0B)' },
   ]
 
   if (loading) return (
@@ -57,20 +57,20 @@ export default function Dashboard() {
       {/* Church Banner */}
       {church && (
         <div style={{
-          background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)',
+          background: 'linear-gradient(135deg, #130826 0%, #2E1065 50%, #130826 100%)',
           borderRadius: 16,
           padding: '28px 32px',
           color: '#fff',
           position: 'relative',
           overflow: 'hidden',
         }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at top right, rgba(79,70,229,0.3) 0%, transparent 65%)' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at top right, rgba(124,58,237,0.35) 0%, transparent 65%)' }} />
           <div style={{ position: 'relative' }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: '#818cf8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: '#C4B5FD', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
               Church Profile
             </div>
             <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.5px' }}>{church.name ?? 'Your Church'}</h1>
-            {church.motto && <p style={{ color: '#a5b4fc', marginTop: 4, fontStyle: 'italic' }}>"{church.motto}"</p>}
+            {church.motto && <p style={{ color: '#DDD6FE', marginTop: 4, fontStyle: 'italic' }}>"{church.motto}"</p>}
             <div style={{ display: 'flex', gap: 24, marginTop: 16, flexWrap: 'wrap' }}>
               {church.pastor && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, color: '#94a3b8' }}>
@@ -106,8 +106,8 @@ export default function Dashboard() {
               <BarChart data={barData} margin={{ left: -10 }}>
                 <XAxis dataKey="type" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip formatter={(v: number) => `GHS ${v.toLocaleString()}`} />
-                <Bar dataKey="total" fill="#4f46e5" radius={[6, 6, 0, 0]} />
+                <Tooltip formatter={(v: unknown) => `KES ${Number(v).toLocaleString()}`} />
+                <Bar dataKey="total" fill="#7C3AED" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -117,10 +117,10 @@ export default function Dashboard() {
               <ResponsiveContainer width="100%" height={220}>
                 <PieChart>
                   <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                    {pieData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+                    {pieData.map((_, i) => <Cell key={i} fill={['#7C3AED','#F59E0B','#10b981','#EC4899'][i % 4]} />)}
                   </Pie>
                   <Legend />
-                  <Tooltip formatter={(v: number) => `GHS ${v.toLocaleString()}`} />
+                  <Tooltip formatter={(v: unknown) => `KES ${Number(v).toLocaleString()}`} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
