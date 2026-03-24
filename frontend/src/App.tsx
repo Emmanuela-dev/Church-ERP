@@ -5,19 +5,20 @@ import ChurchInfo from './pages/ChurchInfo'
 import Members from './pages/Members'
 import Activities from './pages/Activities'
 import Finance from './pages/Finance'
+import './index.css'
 
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="flex min-h-screen bg-gray-100">
+      <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-main)' }}>
         <Sidebar />
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main style={{ flex: 1, padding: '28px 32px', overflowY: 'auto', maxWidth: '100%' }}>
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/church" element={<ChurchInfo />} />
-            <Route path="/members" element={<Members />} />
+            <Route path="/"           element={<Dashboard />} />
+            <Route path="/church"     element={<ChurchInfo />} />
+            <Route path="/members"    element={<Members />} />
             <Route path="/activities" element={<Activities />} />
-            <Route path="/finance" element={<Finance />} />
+            <Route path="/finance"    element={<Finance />} />
           </Routes>
         </main>
       </div>
